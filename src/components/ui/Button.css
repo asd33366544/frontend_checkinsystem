@@ -1,0 +1,88 @@
+.sc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.sc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
+/* Sizes */
+.sc-btn--sm  { font-size: 12.5px; padding: 7px 14px; }
+.sc-btn--md  { font-size: 14px;   padding: 11px 22px; }
+.sc-btn--lg  { font-size: 15px;   padding: 14px 28px; }
+.sc-btn--full { width: 100%; }
+
+/* Variants */
+.sc-btn--primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(26,110,245,.35);
+}
+.sc-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(26,110,245,.5);
+}
+
+.sc-btn--outline {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.sc-btn--outline:hover:not(:disabled) {
+  background: var(--soft);
+  transform: translateY(-2px);
+}
+
+.sc-btn--danger {
+  background: linear-gradient(135deg, #e84545, #c73030);
+  color: #fff;
+}
+.sc-btn--danger:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232,69,69,.4);
+}
+
+.sc-btn--success {
+  background: linear-gradient(135deg, var(--success), #169960);
+  color: #fff;
+}
+.sc-btn--success:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(29,184,126,.4);
+}
+
+.sc-btn--ghost {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+.sc-btn--ghost:hover:not(:disabled) {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+/* Spinner */
+.sc-btn__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sc-spin .7s linear infinite;
+}
+.sc-btn--outline .sc-btn__spinner,
+.sc-btn--ghost   .sc-btn__spinner {
+  border-color: rgba(26,110,245,.3);
+  border-top-color: var(--accent);
+}
+
+@keyframes sc-spin { to { transform: rotate(360deg); } }

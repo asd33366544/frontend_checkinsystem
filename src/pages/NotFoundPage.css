@@ -1,0 +1,18 @@
+.notfound {
+  min-height: calc(100vh - var(--nav-h, 68px));
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 40px 24px;
+  gap: 14px;
+  animation: fadeUp .5s ease;
+}
+.notfound__code {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(80px, 16vw, 140px);
+  font-weight: 700; line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.notfound h1 { font-size: 28px; font-weight: 700; }
+.notfound p  { font-size: 15px; color: var(--muted); max-width: 360px; line-height: 1.6; }

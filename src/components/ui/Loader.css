@@ -1,0 +1,37 @@
+.sc-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.sc-loader__ring {
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: sc-loader-spin .7s linear infinite;
+}
+
+.sc-loader--sm .sc-loader__ring  { width: 20px; height: 20px; }
+.sc-loader--md .sc-loader__ring  { width: 36px; height: 36px; border-width: 3px; }
+.sc-loader--lg .sc-loader__ring  { width: 56px; height: 56px; border-width: 4px; }
+
+.sc-loader__label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sc-loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+@keyframes sc-loader-spin { to { transform: rotate(360deg); } }

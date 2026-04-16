@@ -1,0 +1,24 @@
+.inner-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  animation: fadeUp .45s ease both;
+}
+
+.inner-page__back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface-alt); border: 1.5px solid var(--border);
+  color: var(--muted); font-size: 13px; font-weight: 600;
+  padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  margin-bottom: 24px; font-family: inherit;
+  transition: all .2s;
+}
+.inner-page__back:hover {
+  border-color: var(--accent); color: var(--accent);
+  transform: translateX(-3px);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

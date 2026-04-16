@@ -1,0 +1,71 @@
+.appts-page { display: flex; flex-direction: column; gap: 24px; }
+
+.appts-page__header { margin-bottom: 8px; }
+.appts-page__tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--accent); background: var(--soft);
+  padding: 4px 11px; border-radius: 999px;
+  border: 1px solid rgba(26,110,245,.15); margin-bottom: 10px;
+}
+.appts-page__header h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 3vw, 32px); font-weight: 700; margin-bottom: 6px;
+}
+.appts-page__header p { font-size: 14px; color: var(--muted); }
+
+.appts-page__card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm);
+}
+.appts-page__card h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.appts-page__card p  { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; line-height: 1.55; }
+.appts-page__card--danger {
+  border-color: rgba(232,69,69,.3);
+  background: rgba(232,69,69,.03);
+}
+.appts-page__card--danger h2 { color: var(--danger); }
+
+.appts-page__lookup {
+  display: flex; gap: 10px; margin-bottom: 16px;
+}
+.appts-page__id-input {
+  flex: 1; padding: 10px 14px; font-size: 14px;
+  color: var(--text); background: var(--bg);
+  border: 1.5px solid var(--border); border-radius: 8px;
+  outline: none; font-family: inherit;
+  transition: border-color .2s, box-shadow .2s;
+}
+.appts-page__id-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(26,110,245,.12);
+}
+
+.appts-page__result {
+  background: var(--surface-alt); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px;
+  display: flex; flex-direction: column; gap: 14px;
+  animation: fadeUp .3s ease;
+}
+.appts-page__result-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.appts-page__result-grid > div {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.appts-page__label {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.appts-page__result-grid > div > span:last-child {
+  font-size: 14px; font-weight: 500; color: var(--text);
+}
+
+.appts-page__confirm { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.appts-page__confirm p { font-size: 13.5px; color: var(--text); margin-bottom: 12px; font-weight: 500; }
+.appts-page__confirm-actions { display: flex; gap: 10px; }
+
+@media (max-width: 480px) {
+  .appts-page__lookup { flex-direction: column; }
+  .appts-page__result-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,94 @@
+/* ═══════════════════════════════════════════
+   SYNCARE — global.css
+   Design tokens, resets, typography
+═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@600;700&display=swap');
+
+/* ── Light theme tokens ── */
+:root {
+  --bg:          #f0f4f8;
+  --surface:     #ffffff;
+  --surface-alt: #e8edf4;
+  --border:      #d0d8e6;
+  --text:        #1a2232;
+  --muted:       #5e6e8a;
+  --accent:      #1a6ef5;
+  --accent-dark: #1254c7;
+  --soft:        #e8f0fe;
+  --danger:      #e84545;
+  --success:     #1db87e;
+  --warn:        #f59e0b;
+  --purple:      #7c3aed;
+  --purple-soft: #ede9fe;
+
+  --shadow:    0 4px 24px rgba(26, 46, 80, .10);
+  --shadow-sm: 0 2px 8px  rgba(26, 46, 80, .07);
+
+  --nav-h: 68px;
+}
+
+/* ── Dark theme tokens ── */
+[data-theme="dark"] {
+  --bg:          #0e1520;
+  --surface:     #18222f;
+  --surface-alt: #1f2d3d;
+  --border:      #2c3e55;
+  --text:        #e4ecf7;
+  --muted:       #8aa0bc;
+  --accent:      #4d9aff;
+  --accent-dark: #2b7ee8;
+  --soft:        #1a2d4a;
+  --purple-soft: #2e1f4a;
+  --shadow:    0 4px 24px rgba(0, 0, 0, .35);
+  --shadow-sm: 0 2px 8px  rgba(0, 0, 0, .25);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background .22s, color .22s;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+main  { padding-top: var(--nav-h); flex: 1; }
+
+/* ── Typography ── */
+h1, h2, h3, h4 { line-height: 1.2; }
+a { color: inherit; }
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── Utility animation (used across pages) ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}

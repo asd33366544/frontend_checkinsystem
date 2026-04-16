@@ -1,0 +1,31 @@
+.auth-page {
+  min-height: calc(100vh - var(--nav-h, 68px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page__deco { position: absolute; inset: 0; pointer-events: none; }
+.auth-page__blob {
+  position: absolute;
+  border-radius: 50%;
+  animation: auth-blob-float 7s ease-in-out infinite;
+}
+.auth-page__blob--1 {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(26,110,245,.1) 0%, transparent 70%);
+  top: -150px; right: -100px;
+}
+.auth-page__blob--2 {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(124,58,237,.09) 0%, transparent 70%);
+  bottom: -80px; left: -80px;
+  animation-delay: 3s;
+}
+@keyframes auth-blob-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-20px) scale(1.04); }
+}
