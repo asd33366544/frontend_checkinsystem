@@ -28,6 +28,8 @@ const schema = {
   number:   validatePhone,
   gov_id:   validateGovId,
   password: validatePassword,
+  lat:      () => null, // Optional
+  lng:      () => null, // Optional
 };
 
 const SignupForm = () => {
@@ -38,9 +40,9 @@ const SignupForm = () => {
     values, errors, touched,
     submitting, serverError, serverSuccess,
     handleChange, handleBlur, handleSubmit,
-    setServerError,
+    setServerError, setValues,
   } = useForm(
-    { name: '', age: '', gender: '', number: '', gov_id: '', password: '' },
+    { name: '', age: '', gender: '', number: '', gov_id: '', password: '', lat: '', lng: '' },
     schema,
     async (vals, { setServerError, setServerSuccess }) => {
       try {
@@ -50,6 +52,8 @@ const SignupForm = () => {
           patient_id:     res.id,
           patient_name:   vals.name,
           patient_gender: vals.gender.toUpperCase(),
+          lat:            vals.lat || null,
+          lng:            vals.lng || null,
         };
         login(userData, res.token);
         setServerSuccess('Account created! Redirecting to your dashboard…');
@@ -59,6 +63,25 @@ const SignupForm = () => {
       }
     }
   );
+
+  const captureLocation = () => {
+    if (!navigator.geolocation) {
+      setServerError('Geolocation is not supported by your browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setValues({
+          ...values,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      () => {
+        setServerError('Unable to retrieve your location. Please check your permissions.');
+      }
+    );
+  };
 
   return (
     <div className="auth-card">
@@ -156,6 +179,23 @@ const SignupForm = () => {
           touched={touched.password}
           required
         />
+
+        <div className="auth-form__location" style={{ marginBottom: '1.5rem' }}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={captureLocation}
+            fullWidth
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+          >
+            📍 {values.lat ? 'Location Captured ✓' : 'Share My Location (For smart scheduling)'}
+          </Button>
+          {(values.lat && values.lng) && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginTop: '0.5rem', textAlign: 'center' }}>
+              We will suggest departure times based on your location.
+            </p>
+          )}
+        </div>
 
         <Button
           type="submit"

@@ -2,9 +2,11 @@
 //  SYNCARE — components/forms/AppointmentForm.jsx
 // ═══════════════════════════════════════════
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useForm from '../../hooks/useForm';
 import useAppointments from '../../hooks/useAppointments';
+import { useAuth } from '../../context/AuthContext';
+import { getTravelTimeEstimate } from '../../api/appointments';
 import {
   validateDate,
   validateTime,
@@ -34,6 +36,9 @@ const todayISO = () => new Date().toISOString().split('T')[0];
 
 const AppointmentForm = ({ onSuccess }) => {
   const { book } = useAppointments();
+  const { user } = useAuth();
+  const [travelInfo, setTravelInfo] = useState(null);
+  const [fetchingTravel, setFetchingTravel] = useState(false);
 
   const {
     values, errors, touched,
@@ -60,6 +65,30 @@ const AppointmentForm = ({ onSuccess }) => {
       }
     }
   );
+
+  useEffect(() => {
+    let active = true;
+    const fetchTravelTime = async () => {
+      if (values.time && user?.lat && user?.lng) {
+        setFetchingTravel(true);
+        try {
+          const travelData = await getTravelTimeEstimate(user.lat, user.lng, values.time);
+          if (active && travelData && travelData.duration_text) {
+             setTravelInfo(travelData);
+          }
+        } catch (e) {
+             console.error("Failed to fetch travel time:", e);
+        } finally {
+             if (active) setFetchingTravel(false);
+        }
+      } else {
+        setTravelInfo(null);
+      }
+    };
+    
+    fetchTravelTime();
+    return () => { active = false; };
+  }, [values.time, user]);
 
   return (
     <div className="appt-form-card">
@@ -126,6 +155,14 @@ const AppointmentForm = ({ onSuccess }) => {
               <strong>{values.type}</strong>
               <span> — {toApiDate(values.date)} at {values.time}</span>
             </div>
+
+            {fetchingTravel && <p style={{ fontSize: '0.85rem', color: 'var(--color-primary)', marginTop: '0.75rem' }}>📍 Calculating route...</p>}
+            {travelInfo && (
+              <div className="appt-form__travel" style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--color-border)', fontSize: '0.9rem' }}>
+                <p style={{ margin: '0 0 0.25rem 0' }}>🚗 <strong>Travel Time:</strong> {travelInfo.duration_text}</p>
+                <p style={{ margin: 0 }}>⏰ <strong>Recommended Departure:</strong> Leave by <strong>{travelInfo.recommended_departure}</strong> to arrive on time</p>
+              </div>
+            )}
           </div>
         )}
 
