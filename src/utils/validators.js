@@ -85,6 +85,11 @@ export const validateTime = (value) => {
     return 'Time must be in HH:MM (24-hour) format.';
   if (!/^([01]\d|2[0-3]):(00|15|30|45)$/.test(str))
     return 'Minutes must be 00, 15, 30, or 45.';
+  
+  const [hh, mm] = str.split(':').map(Number);
+  if (hh < 8 || hh > 12 || (hh === 12 && mm > 0)) {
+    return 'Appointments are only available between 08:00 AM and 12:00 PM.';
+  }
   return null;
 };
 

@@ -32,5 +32,5 @@
   "devDependencies": {
     "eslint-plugin-react-hooks": "^4.6.0"
   },
-  "proxy": "https://rickle-vanity-catlike.ngrok-free.dev"
+  "proxy": "https://trickle-vanity-catlike.ngrok-free.dev"
 }

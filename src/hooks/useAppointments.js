@@ -14,6 +14,7 @@ const useAppointments = () => {
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState(null);
   const [appointments, setAppointments] = useState([]);
+  const [location, setLocation] = useState(null);
 
   const clearError = () => setError(null);
 
@@ -39,6 +40,9 @@ const useAppointments = () => {
     try {
       const res = await fetchAppointments();
       setAppointments(res.data || []);
+      if (res.location) {
+        setLocation(res.location);
+      }
       return res.data;
     } catch (err) {
       setError(err.message || 'Failed to fetch appointments.');
@@ -63,7 +67,7 @@ const useAppointments = () => {
     }
   }, []);
 
-  return { loading, error, appointments, setAppointments, clearError, book, fetchAll, cancel };
+  return { loading, error, appointments, location, setAppointments, clearError, book, fetchAll, cancel };
 };
 
 export default useAppointments;

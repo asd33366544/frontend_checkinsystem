@@ -83,6 +83,7 @@ const useForm = (initialValues = {}, schema = {}, onSubmit) => {
     handleSubmit,
     reset,
     setField,
+    setValues,
     setServerError,
     setServerSuccess,
   };

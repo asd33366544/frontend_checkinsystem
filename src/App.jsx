@@ -18,6 +18,7 @@ import DashboardPage         from './pages/DashboardPage';
 import BookAppointmentPage   from './pages/BookAppointmentPage';
 import AppointmentsPage      from './pages/AppointmentsPage';
 import NotFoundPage          from './pages/NotFoundPage';
+import AboutUsPage           from './pages/AboutUsPage';
 
 import './global.css';
 
@@ -44,6 +45,7 @@ const App = () => {
           <Routes>
             {/* Public */}
             <Route path="/"       element={<HomePage />} />
+            <Route path="/about"  element={<AboutUsPage />} />
             <Route path="/login"  element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
 

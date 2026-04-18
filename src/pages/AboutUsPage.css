@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════════
+   SYNCARE — AboutUsPage.css
+═══════════════════════════════════════════ */
+
+.about-page {
+  padding: 4rem 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.about-page__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-page__tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(43, 89, 255, 0.1);
+  color: var(--color-primary);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.about-page__header h1 {
+  font-size: 2.5rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.about-page__header p {
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.about-member-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.about-member-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(43, 89, 255, 0.3);
+}
+
+.about-member-card__photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  overflow: hidden;
+  border: 4px solid var(--color-bg);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.about-member-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-member-card__info h3 {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  margin: 0 0 0.5rem;
+}
+
+.about-member-card__role {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.about-member-card__contrib {
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin: 0;
+}

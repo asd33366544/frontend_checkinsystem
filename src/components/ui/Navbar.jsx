@@ -27,11 +27,13 @@ const Navbar = ({ theme, onToggleTheme }) => {
   const navLinks = isLoggedIn
     ? [
         { to: '/dashboard', label: t('dashboard') },
+        { to: '/about', label: 'About Us' },
         { to: '/appointments/book', label: t('bookAppointment') },
         { to: '/appointments', label: t('myAppointments') },
       ]
     : [
         { to: '/', label: t('home') },
+        { to: '/about', label: 'About Us' },
         { to: '/login', label: t('signIn') },
         { to: '/signup', label: t('register') },
       ];
@@ -40,7 +42,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
     <>
       <nav className="sc-nav">
         <Link to="/" className="sc-nav__brand" onClick={() => setDrawerOpen(false)}>
-          <div className="sc-nav__logo-icon">S</div>
+          <img src="/logo.png" alt="SynCare Logo" className="sc-nav__logo-img" style={{ height: '40px', width: 'auto', marginRight: '10px' }} />
           <span className="sc-nav__logo-text">
             Syn<span>Care</span>
           </span>

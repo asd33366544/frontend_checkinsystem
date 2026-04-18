@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import Button from '../components/ui/Button';
-import { CLINIC_TYPES } from '../utils/constants';
 import './HomePage.css';
 
 const HomePage = () => {
