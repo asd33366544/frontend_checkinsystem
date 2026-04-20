@@ -25,7 +25,7 @@ const TEAM_MEMBERS = [
     name: 'Esraa Esmat',
     role: 'Member',
     contribution: 'Key contribution details will be added here soon.',
-    photoUrl: `${process.env.PUBLIC_URL}/images/image3.jpg`,
+    photoUrl: `${process.env.PUBLIC_URL}/images/image3.jpg`, // missing, needs fallback or addition later
   },
   {
     id: 4,
@@ -46,21 +46,21 @@ const TEAM_MEMBERS = [
     name: 'Ahmed Hani',
     role: 'Member',
     contribution: 'Key contribution details will be added here soon.',
-    photoUrl: `${process.env.PUBLIC_URL}/images/image6.jpg`,
+    photoUrl: `${process.env.PUBLIC_URL}/images/image6.jpg`, // missing
   },
   {
     id: 7,
     name: 'Sama Mohammed',
     role: 'Member',
     contribution: 'Key contribution details will be added here soon.',
-    photoUrl: `${process.env.PUBLIC_URL}/images/image7.jpg`,
+    photoUrl: `${process.env.PUBLIC_URL}/images/image7.jpg`, // missing
   },
   {
     id: 8,
     name: 'Shrouk Mohamed',
     role: 'Member',
     contribution: 'Key contribution details will be added here soon.',
-    photoUrl: `${process.env.PUBLIC_URL}/images/image8.jpg`,
+    photoUrl: `${process.env.PUBLIC_URL}/images/image8.jpg`, // missing
   },
   {
     id: 9,

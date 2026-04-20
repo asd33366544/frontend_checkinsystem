@@ -140,7 +140,7 @@ const AppointmentsPage = () => {
                     >
                       Cancel
                     </Button>
-                    
+
                     {!locLat ? (
                       <Button variant="secondary" size="sm" onClick={handleCaptureLocation}>
                         📍 Allow Location to see Travel Route
