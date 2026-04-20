@@ -5,13 +5,71 @@
 import React from 'react';
 import './AboutUsPage.css';
 
-const TEAM_MEMBERS = Array.from({ length: 9 }, (_, i) => ({
-  id: i + 1,
-  name: `Team Member ${i + 1}`,
-  role: 'Software Engineer',
-  contribution: 'Key contribution details will be added here soon.',
-  photoUrl: `https://ui-avatars.com/api/?name=Member+${i + 1}&background=random&color=fff&size=150`,
-}));
+const TEAM_MEMBERS = [
+  {
+    id: 1,
+    name: 'Ahmed Atta',
+    role: 'Leader',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image1.jpg',
+  },
+  {
+    id: 2,
+    name: 'Ahmed Khalid',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image2.jpg',
+  },
+  {
+    id: 3,
+    name: 'Esraa Esmat',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image3.jpg',
+  },
+  {
+    id: 4,
+    name: 'Ahmed Adel',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image4.jpg',
+  },
+  {
+    id: 5,
+    name: 'Khaled Ladham',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image5.jpg',
+  },
+  {
+    id: 6,
+    name: 'Ahmed Hani',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image6.jpg',
+  },
+  {
+    id: 7,
+    name: 'Sama Mohammed',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image7.jpg',
+  },
+  {
+    id: 8,
+    name: 'Shrouk Mohamed',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image8.jpg',
+  },
+  {
+    id: 9,
+    name: 'Sajid Almanakhly',
+    role: 'Member',
+    contribution: 'Key contribution details will be added here soon.',
+    photoUrl: '/images/image9.jpg',
+  }
+];
 
 const AboutUsPage = () => {
   return (

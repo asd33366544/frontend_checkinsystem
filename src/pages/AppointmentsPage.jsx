@@ -23,23 +23,23 @@ const calculateTravel = (userLat, userLng, apptTime) => {
   const dLat = toRad(destLat - userLat);
   const dLon = toRad(destLng - userLng);
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(userLat)) * Math.cos(toRad(destLat)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(toRad(userLat)) * Math.cos(toRad(destLat)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; 
-  
-  const mins = Math.round((d / 20) * 60) + 10; 
-  
+  const d = R * c;
+
+  const mins = Math.round((d / 20) * 60) + 10;
+
   const [hh, mm] = apptTime.split(':').map(Number);
   const totalMins = hh * 60 + mm;
   const departMins = totalMins - mins - 15;
-  
+
   const depH = Math.floor(departMins / 60);
   const depM = departMins % 60;
-  
+
   const safeDepH = depH < 0 ? 24 + depH : depH;
   const formattedDepart = `${String(safeDepH).padStart(2, '0')}:${String(depM).padStart(2, '0')}`;
-  
+
   return { duration: mins, departure: formattedDepart };
 };
 
@@ -119,9 +119,9 @@ const AppointmentsPage = () => {
                     </Button>
                     {user?.lat && (
                       <>
-                        <a 
+                        <a
                           href={`https://www.google.com/maps/dir/?api=1&origin=${user.lat},${user.lng}&destination=30.03028,31.22917`}
-                          target="_blank" 
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn--primary btn--sm"
                           style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
