@@ -36,7 +36,7 @@ const App = () => {
     setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <LanguageProvider>
         <AuthProvider>
           <Navbar theme={theme} onToggleTheme={toggleTheme} />
