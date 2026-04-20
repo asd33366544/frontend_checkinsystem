@@ -42,7 +42,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
     <>
       <nav className="sc-nav">
         <Link to="/" className="sc-nav__brand" onClick={() => setDrawerOpen(false)}>
-          <img src="/logo.png" alt="SynCare Logo" className="sc-nav__logo-img" style={{ height: '40px', width: 'auto', marginRight: '10px' }} />
+          <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="SynCare Logo" className="sc-nav__logo-img" style={{ height: '40px', width: 'auto', marginRight: '10px' }} />
           <span className="sc-nav__logo-text">
             Syn<span>Care</span>
           </span>

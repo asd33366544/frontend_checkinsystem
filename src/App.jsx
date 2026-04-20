@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════
 
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -36,7 +36,7 @@ const App = () => {
     setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter>
       <LanguageProvider>
         <AuthProvider>
           <Navbar theme={theme} onToggleTheme={toggleTheme} />
@@ -73,7 +73,7 @@ const App = () => {
         </main>
       </AuthProvider>
       </LanguageProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
