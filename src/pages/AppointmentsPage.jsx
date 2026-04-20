@@ -53,6 +53,28 @@ const AppointmentsPage = () => {
   const [cancelError, setCancelError] = useState(null);
   const [showCancelAll, setShowCancelAll] = useState(false);
 
+  const [locLat, setLocLat] = useState(user?.lat || null);
+  const [locLng, setLocLng] = useState(user?.lng || null);
+
+  useEffect(() => {
+    if (user?.lat) setLocLat(user.lat);
+    if (user?.lng) setLocLng(user.lng);
+  }, [user]);
+
+  const handleCaptureLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocLat(pos.coords.latitude);
+        setLocLng(pos.coords.longitude);
+      },
+      () => alert('Unable to get location.')
+    );
+  };
+
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
@@ -108,6 +130,7 @@ const AppointmentsPage = () => {
                     <div><span className="appts-page__label">Time</span><span>{appointment.appointment_time}</span></div>
                     <div><span className="appts-page__label">Clinic</span><span>{appointment.appointment_name}</span></div>
                   </div>
+
                   <div style={{ display: 'flex', gap: '10px', marginTop: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                     <Button
                       variant="danger"
@@ -117,10 +140,15 @@ const AppointmentsPage = () => {
                     >
                       Cancel
                     </Button>
-                    {user?.lat && (
+                    
+                    {!locLat ? (
+                      <Button variant="secondary" size="sm" onClick={handleCaptureLocation}>
+                        📍 Allow Location to see Travel Route
+                      </Button>
+                    ) : (
                       <>
                         <a
-                          href={`https://www.google.com/maps/dir/?api=1&origin=${user.lat},${user.lng}&destination=30.03028,31.22917`}
+                          href={`https://www.google.com/maps/dir/?api=1&origin=${locLat},${locLng}&destination=30.03028,31.22917`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn--primary btn--sm"
@@ -129,7 +157,7 @@ const AppointmentsPage = () => {
                           📍 View Route
                         </a>
                         {(() => {
-                          const travel = calculateTravel(user.lat, user.lng, appointment.appointment_time);
+                          const travel = calculateTravel(locLat, locLng, appointment.appointment_time);
                           return travel ? (
                             <span style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginLeft: '10px' }}>
                               🚗 ~{travel.duration} mins | ⏰ Leave by: <strong>{travel.departure}</strong>
