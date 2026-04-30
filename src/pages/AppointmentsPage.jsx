@@ -253,11 +253,11 @@ const AppointmentsPage = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
         }}>
           <div style={{
-            backgroundColor: 'var(--color-surface)', width: '100%', maxWidth: '500px', 
-            borderRadius: '12px', padding: '30px', boxShadow: 'var(--shadow-lg)',
+            backgroundColor: 'var(--surface)', width: '100%', maxWidth: '500px', 
+            borderRadius: '12px', padding: '30px', boxShadow: 'var(--shadow)',
             maxHeight: '90vh', overflowY: 'auto'
           }}>
-            <h2 style={{ marginBottom: '15px', fontSize: '1.5rem', color: 'var(--color-text)' }}>Clinical Report</h2>
+            <h2 style={{ marginBottom: '15px', fontSize: '1.5rem', color: 'var(--text)' }}>Clinical Report</h2>
 
             {reportLoading && <Loader size="sm" label="Loading report..." />}
             
@@ -268,14 +268,14 @@ const AppointmentsPage = () => {
             {!reportLoading && selectedReport && (
               <div>
                 <div style={{ marginBottom: '15px' }}>
-                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '5px' }}>Report Type</strong>
-                  <div style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>{selectedReport.reportType}</div>
+                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--muted)', marginBottom: '5px' }}>Report Type</strong>
+                  <div style={{ fontSize: '1.1rem', color: 'var(--accent)' }}>{selectedReport.reportType}</div>
                 </div>
                 <div style={{ marginBottom: '25px' }}>
-                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '5px' }}>Details</strong>
+                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--muted)', marginBottom: '5px' }}>Details</strong>
                   <div style={{ 
-                    padding: '15px', backgroundColor: 'var(--color-bg)', borderRadius: '8px',
-                    whiteSpace: 'pre-wrap', lineHeight: '1.6', color: 'var(--color-text)', border: '1px solid var(--color-border)'
+                    padding: '15px', backgroundColor: 'var(--bg)', borderRadius: '8px',
+                    whiteSpace: 'pre-wrap', lineHeight: '1.6', color: 'var(--text)', border: '1px solid var(--border)'
                   }}>
                     {selectedReport.reportBody}
                   </div>

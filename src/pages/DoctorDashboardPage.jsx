@@ -138,14 +138,14 @@ const DoctorDashboardPage = () => {
               {patients.map(p => (
                 <div key={p.appointment_id} className="dashboard__info-card" style={{ padding: '20px' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <div><span style={{color: 'var(--color-text-light)', fontSize: '0.85rem'}}>Patient</span><br/><strong>{p.patient_name}</strong></div>
-                    <div><span style={{color: 'var(--color-text-light)', fontSize: '0.85rem'}}>Date & Time</span><br/>{p.appointment_date} at {p.appointment_time}</div>
-                    <div><span style={{color: 'var(--color-text-light)', fontSize: '0.85rem'}}>Age / Gender</span><br/>{p.patient_age} / {p.patient_gender === 'M' ? 'Male' : 'Female'}</div>
-                    <div><span style={{color: 'var(--color-text-light)', fontSize: '0.85rem'}}>Status</span><br/>
+                    <div><span style={{color: 'var(--muted)', fontSize: '0.85rem'}}>Patient</span><br/><strong>{p.patient_name}</strong></div>
+                    <div><span style={{color: 'var(--muted)', fontSize: '0.85rem'}}>Date & Time</span><br/>{p.appointment_date} at {p.appointment_time}</div>
+                    <div><span style={{color: 'var(--muted)', fontSize: '0.85rem'}}>Age / Gender</span><br/>{p.patient_age} / {p.patient_gender === 'M' ? 'Male' : 'Female'}</div>
+                    <div><span style={{color: 'var(--muted)', fontSize: '0.85rem'}}>Status</span><br/>
                       <span style={{
                         display: 'inline-block', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem',
-                        backgroundColor: p.status === 1 ? 'var(--color-success-bg)' : 'var(--color-warning-bg)',
-                        color: p.status === 1 ? 'var(--color-success)' : 'var(--color-warning)'
+                        backgroundColor: p.status === 1 ? 'var(--soft)' : 'var(--soft)',
+                        color: p.status === 1 ? 'var(--success)' : 'var(--warn)'
                       }}>
                         {p.status === 1 ? 'Completed' : 'Pending'}
                       </span>
@@ -182,11 +182,11 @@ const DoctorDashboardPage = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
         }}>
           <div style={{
-            backgroundColor: 'var(--color-surface)', width: '100%', maxWidth: '500px', 
-            borderRadius: '12px', padding: '30px', boxShadow: 'var(--shadow-lg)'
+            backgroundColor: 'var(--surface)', width: '100%', maxWidth: '500px', 
+            borderRadius: '12px', padding: '30px', boxShadow: 'var(--shadow)'
           }}>
-            <h2 style={{ marginBottom: '5px', fontSize: '1.5rem', color: 'var(--color-text)' }}>Upload Clinical Report</h2>
-            <p style={{ marginBottom: '20px', color: 'var(--color-text-light)', fontSize: '0.9rem' }}>
+            <h2 style={{ marginBottom: '5px', fontSize: '1.5rem', color: 'var(--text)' }}>Upload Clinical Report</h2>
+            <p style={{ marginBottom: '20px', color: 'var(--muted)', fontSize: '0.9rem' }}>
               Appointment #{selectedAppointmentId}
             </p>
 
@@ -202,8 +202,8 @@ const DoctorDashboardPage = () => {
                     onChange={e => setReportType(e.target.value)}
                     style={{
                       width: '100%', padding: '12px', borderRadius: '8px', 
-                      border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg)',
-                      color: 'var(--color-text)', fontSize: '1rem'
+                      border: '1px solid var(--border)', backgroundColor: 'var(--bg)',
+                      color: 'var(--text)', fontSize: '1rem'
                     }}
                   >
                     <option value="Radiology">Radiology</option>
@@ -221,8 +221,8 @@ const DoctorDashboardPage = () => {
                     placeholder="Enter the detailed report..."
                     style={{
                       width: '100%', padding: '12px', borderRadius: '8px', 
-                      border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg)',
-                      color: 'var(--color-text)', fontSize: '1rem', resize: 'vertical'
+                      border: '1px solid var(--border)', backgroundColor: 'var(--bg)',
+                      color: 'var(--text)', fontSize: '1rem', resize: 'vertical'
                     }}
                   />
                 </div>
