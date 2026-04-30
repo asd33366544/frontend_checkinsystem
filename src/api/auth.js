@@ -10,7 +10,7 @@ import api from './apiClient';
  * @param {{ name, age, gender, number, gov_id, password }} payload
  * @returns {{ status, message, id, token }}
  */
-export const signup = (payload) => api.post('/signup/', payload, false);
+export const signup = (payload) => api.post('/patient/signup/', payload, false);
 
 /**
  * Sign in with auth_id + password + staff flag.
@@ -24,4 +24,4 @@ export const signin = (payload) => api.post('/signin/', payload, false);
  * Requires a valid JWT (auth = true).
  * @returns {{ status, message }}
  */
-export const deleteAccount = () => api.delete('/remove/', true);
+export const deleteAccount = () => api.delete('/patient/remove/', true);
