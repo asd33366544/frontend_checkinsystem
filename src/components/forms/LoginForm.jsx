@@ -31,7 +31,7 @@ const LoginForm = () => {
     values, errors, touched,
     submitting, serverError, serverSuccess,
     handleChange, handleBlur, handleSubmit,
-    setServerError, resetForm
+    setServerError, reset
   } = useForm(
     { auth_id: '', password: '' },
     schema,
@@ -54,7 +54,7 @@ const LoginForm = () => {
 
   const toggleRole = () => {
     setIsDoctor(!isDoctor);
-    resetForm();
+    reset();
     setServerError(null);
   };
 
