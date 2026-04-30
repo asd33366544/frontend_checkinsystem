@@ -30,3 +30,11 @@ export const fetchAppointments = () =>
 export const cancelAppointment = (appointmentId) =>
   api.post('/cancel/', { appointment_id: appointmentId }, true);
 
+/**
+ * Get the clinical report for a specific appointment
+ * @param {number} appointmentId 
+ * @returns {{ status, data: { reportType, reportBody } }}
+ */
+export const getClinicalReport = (appointmentId) =>
+  api.get(`/patient/report/${appointmentId}`, true);
+

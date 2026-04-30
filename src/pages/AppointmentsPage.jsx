@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppointments from '../hooks/useAppointments';
 import { useAuth } from '../context/AuthContext';
+import { getClinicalReport } from '../api/appointments';
 import Button from '../components/ui/Button';
 import Alert from '../components/ui/Alert';
 import Loader from '../components/ui/Loader';
@@ -56,6 +57,12 @@ const AppointmentsPage = () => {
   const [locLat, setLocLat] = useState(user?.lat || null);
   const [locLng, setLocLng] = useState(user?.lng || null);
 
+  // Report Modal State
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportFetchError, setReportFetchError] = useState(null);
+
   useEffect(() => {
     if (user?.lat) setLocLat(user.lat);
     if (user?.lng) setLocLng(user.lng);
@@ -94,6 +101,30 @@ const AppointmentsPage = () => {
     } finally {
       setCancelLoading(false);
       setShowCancelAll(false);
+    }
+  };
+
+  const handleViewReport = async (appointmentId) => {
+    setReportModalOpen(true);
+    setReportLoading(true);
+    setReportFetchError(null);
+    setSelectedReport(null);
+
+    try {
+      const res = await getClinicalReport(appointmentId);
+      if (res && res.data) {
+        setSelectedReport(res.data);
+      } else {
+        setReportFetchError('No report data received.');
+      }
+    } catch (err) {
+      if (err.message && err.message.toLowerCase().includes('no report found')) {
+         setReportFetchError('No report available yet.');
+      } else {
+         setReportFetchError(err.message || 'Failed to fetch report.');
+      }
+    } finally {
+      setReportLoading(false);
     }
   };
 
@@ -139,6 +170,14 @@ const AppointmentsPage = () => {
                       onClick={() => handleCancel(appointment.appointment_id)}
                     >
                       Cancel
+                    </Button>
+                    
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleViewReport(appointment.appointment_id)}
+                    >
+                      View Report
                     </Button>
 
                     {!locLat ? (
@@ -205,6 +244,53 @@ const AppointmentsPage = () => {
           )}
         </div>
       </div>
+
+      {/* Report View Modal */}
+      {reportModalOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, 
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+        }}>
+          <div style={{
+            backgroundColor: 'var(--color-surface)', width: '100%', maxWidth: '500px', 
+            borderRadius: '12px', padding: '30px', boxShadow: 'var(--shadow-lg)',
+            maxHeight: '90vh', overflowY: 'auto'
+          }}>
+            <h2 style={{ marginBottom: '15px', fontSize: '1.5rem', color: 'var(--color-text)' }}>Clinical Report</h2>
+
+            {reportLoading && <Loader size="sm" label="Loading report..." />}
+            
+            {!reportLoading && reportFetchError && (
+              <Alert type={reportFetchError === 'No report available yet.' ? 'info' : 'error'} message={reportFetchError} />
+            )}
+
+            {!reportLoading && selectedReport && (
+              <div>
+                <div style={{ marginBottom: '15px' }}>
+                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '5px' }}>Report Type</strong>
+                  <div style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>{selectedReport.reportType}</div>
+                </div>
+                <div style={{ marginBottom: '25px' }}>
+                  <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '5px' }}>Details</strong>
+                  <div style={{ 
+                    padding: '15px', backgroundColor: 'var(--color-bg)', borderRadius: '8px',
+                    whiteSpace: 'pre-wrap', lineHeight: '1.6', color: 'var(--color-text)', border: '1px solid var(--color-border)'
+                  }}>
+                    {selectedReport.reportBody}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+              <Button type="button" variant="primary" onClick={() => setReportModalOpen(false)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

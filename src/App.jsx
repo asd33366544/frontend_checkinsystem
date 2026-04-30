@@ -15,12 +15,20 @@ import HomePage              from './pages/HomePage';
 import LoginPage             from './pages/LoginPage';
 import SignupPage            from './pages/SignupPage';
 import DashboardPage         from './pages/DashboardPage';
+import DoctorDashboardPage   from './pages/DoctorDashboardPage';
 import BookAppointmentPage   from './pages/BookAppointmentPage';
 import AppointmentsPage      from './pages/AppointmentsPage';
 import NotFoundPage          from './pages/NotFoundPage';
 import AboutUsPage           from './pages/AboutUsPage';
 
+import { useAuth } from './context/AuthContext';
+
 import './global.css';
+
+const DashboardWrapper = () => {
+  const { isDoctor } = useAuth();
+  return isDoctor ? <DoctorDashboardPage /> : <DashboardPage />;
+};
 
 const App = () => {
   const [theme, setTheme] = useState(
@@ -52,7 +60,7 @@ const App = () => {
             {/* Protected */}
             <Route
               path="/dashboard"
-              element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}
+              element={<ProtectedRoute><DashboardWrapper /></ProtectedRoute>}
             />
             <Route
               path="/appointments"

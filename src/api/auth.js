@@ -13,9 +13,9 @@ import api from './apiClient';
 export const signup = (payload) => api.post('/signup/', payload, false);
 
 /**
- * Sign in with gov_id + password.
- * @param {{ gov_id, password }} payload
- * @returns {{ status, data: { patient_id, patient_name, patient_gender }, token }}
+ * Sign in with auth_id + password + staff flag.
+ * @param {{ auth_id, password, staff }} payload
+ * @returns {{ status, data: { patient_id, patient_name, patient_gender } | { doctor_id, doctor_name, doctor_specialty }, token }}
  */
 export const signin = (payload) => api.post('/signin/', payload, false);
 

@@ -25,17 +25,22 @@ const Navbar = ({ theme, onToggleTheme }) => {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = isLoggedIn
-    ? [
-        { to: '/dashboard', label: t('dashboard') },
-        { to: '/about', label: 'About Us' },
-        { to: '/appointments/book', label: t('bookAppointment') },
-        { to: '/appointments', label: t('myAppointments') },
-      ]
+    ? isDoctor
+      ? [
+          { to: '/dashboard', label: t('dashboard') || 'Dashboard' },
+          { to: '/about', label: 'About Us' },
+        ]
+      : [
+          { to: '/dashboard', label: t('dashboard') || 'Dashboard' },
+          { to: '/about', label: 'About Us' },
+          { to: '/appointments/book', label: t('bookAppointment') || 'Book Appointment' },
+          { to: '/appointments', label: t('myAppointments') || 'My Appointments' },
+        ]
     : [
-        { to: '/', label: t('home') },
+        { to: '/', label: t('home') || 'Home' },
         { to: '/about', label: 'About Us' },
-        { to: '/login', label: t('signIn') },
-        { to: '/signup', label: t('register') },
+        { to: '/login', label: t('signIn') || 'Sign In' },
+        { to: '/signup', label: t('register') || 'Register' },
       ];
 
   return (
@@ -65,7 +70,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
         <div className="sc-nav__controls">
           {isLoggedIn && (
             <span className="sc-nav__user">
-              👤 {user?.patient_name || t('patient')}
+              👤 {isDoctor ? `Dr. ${user?.doctor_name}` : (user?.patient_name || t('patient'))}
             </span>
           )}
 
