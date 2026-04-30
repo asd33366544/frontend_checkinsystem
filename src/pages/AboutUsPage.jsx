@@ -15,9 +15,9 @@ const TEAM_MEMBERS = [
   },
   {
     id: 2,
-    name: 'Ahmed Khalid',
-    role: 'Member',
-    contribution: 'Key contribution details will be added here soon.',
+    name: 'Ahmed (KTD) Khaled',
+    role: 'Backend Architect & Developer',
+    contribution: "I architect, build, and maintain Syncare's high-performance backend, ensuring patient data remains heavily encrypted and flawlessly accessible.",
     photoUrl: `${process.env.PUBLIC_URL}/images/image2.jpg`,
   },
   {
