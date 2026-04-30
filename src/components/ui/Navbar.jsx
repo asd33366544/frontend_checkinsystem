@@ -10,7 +10,7 @@ import Button from './Button';
 import './Navbar.css';
 
 const Navbar = ({ theme, onToggleTheme }) => {
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn, isDoctor, user, logout } = useAuth();
   const { lang, toggleLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
