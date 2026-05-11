@@ -185,6 +185,8 @@ const ChatbotPage = () => {
   const animFrameRef = useRef(null);
   const phraseRecorderRef = useRef(null);
   const currentAudioRef = useRef(null);
+  const mediaStreamRef = useRef(null);
+  const autoStopTimerRef = useRef(null);
 
   const stepRef = useRef('idle');
   const bookingRef = useRef({});
@@ -346,11 +348,20 @@ const ChatbotPage = () => {
     draw();
   }, []);
 
+  const cleanupRecording = useCallback(() => {
+    if (autoStopTimerRef.current) { clearTimeout(autoStopTimerRef.current); autoStopTimerRef.current = null; }
+    if (animFrameRef.current) { cancelAnimationFrame(animFrameRef.current); animFrameRef.current = null; }
+    if (audioCtxRef.current) { try { audioCtxRef.current.close(); } catch(e) {} audioCtxRef.current = null; }
+    if (mediaStreamRef.current) { mediaStreamRef.current.getTracks().forEach(t => t.stop()); mediaStreamRef.current = null; }
+    setIsRecording(false);
+    setShowOverlay(false);
+  }, []);
+
   const startRecording = useCallback(() => {
     if (!SpeechRecognition) { showToastMsg('المتصفح مش بيدعم التعرف على الصوت'); return; }
     const rec = new SpeechRecognition();
     rec.lang = 'ar-EG';
-    rec.continuous = false;
+    rec.continuous = true;
     rec.interimResults = true;
     rec.maxAlternatives = 1;
     recognitionRef.current = rec;
@@ -358,8 +369,16 @@ const ChatbotPage = () => {
     setIsRecording(true);
     setShowOverlay(true);
 
+    // Auto-stop after 30 seconds to prevent infinite recording
+    autoStopTimerRef.current = setTimeout(() => {
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch(e) {}
+      }
+    }, 30000);
+
     // Audio context for waveform
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      mediaStreamRef.current = stream;
       const actx = new (window.AudioContext || window.webkitAudioContext)();
       audioCtxRef.current = actx;
       const src = actx.createMediaStreamSource(stream);
@@ -373,34 +392,42 @@ const ChatbotPage = () => {
 
       rec.onresult = (e) => {
         let transcript = '';
-        for (let i = 0; i < e.results.length; i++) transcript += e.results[i][0].transcript;
+        for (let i = 0; i < e.results.length; i++) {
+          transcript += e.results[i][0].transcript;
+        }
         setVoiceTranscript(transcript);
       };
       rec.onend = () => {
-        setIsRecording(false);
-        setShowOverlay(false);
-        stream.getTracks().forEach(t => t.stop());
-        if (audioCtxRef.current) { audioCtxRef.current.close(); audioCtxRef.current = null; }
-        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        cleanupRecording();
       };
-      rec.onerror = () => {
-        setIsRecording(false);
-        setShowOverlay(false);
-        stream.getTracks().forEach(t => t.stop());
-        if (audioCtxRef.current) { audioCtxRef.current.close(); audioCtxRef.current = null; }
+      rec.onerror = (e) => {
+        cleanupRecording();
+        if (e.error === 'not-allowed') {
+          showToastMsg('مش قادر أوصل للمايك - اسمح بالوصول');
+        } else if (e.error !== 'aborted' && e.error !== 'no-speech') {
+          showToastMsg('حصلت مشكلة في التسجيل - حاول تاني');
+        }
       };
-      rec.start();
+      try {
+        rec.start();
+      } catch (e) {
+        cleanupRecording();
+        showToastMsg('مش قادر أبدأ التسجيل - حاول تاني');
+      }
     }).catch(() => {
-      setIsRecording(false);
-      setShowOverlay(false);
+      cleanupRecording();
       showToastMsg('مش قادر أوصل للمايك - اسمح بالوصول');
     });
     // eslint-disable-next-line
-  }, [drawWave]);
+  }, [drawWave, cleanupRecording]);
 
   const stopRecording = useCallback(() => {
-    if (recognitionRef.current) { recognitionRef.current.stop(); }
-  }, []);
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch(e) {}
+    }
+    // Cleanup will also be triggered by onend, but ensure it runs
+    cleanupRecording();
+  }, [cleanupRecording]);
 
   const addBotMsg = useCallback((html) => {
     setMessages(prev => [...prev, { type:'bot', html, time: getTime() }]);
@@ -714,13 +741,16 @@ const ChatbotPage = () => {
   }, [processMessage, botReply, speak, handlePickTime, handleConfirm, selectClinic]);
 
   // Process voice transcript when recording ends
+  const prevRecordingRef = useRef(false);
   useEffect(() => {
-    if (!isRecording && voiceTranscript) {
+    // Only process when recording transitions from true to false
+    if (prevRecordingRef.current && !isRecording && voiceTranscript) {
       processVoiceInput(voiceTranscript);
       setVoiceTranscript('');
     }
+    prevRecordingRef.current = isRecording;
     // eslint-disable-next-line
-  }, [isRecording]);
+  }, [isRecording, voiceTranscript]);
 
   // TTS auto-play on important bot messages
   useEffect(() => {
