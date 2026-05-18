@@ -5,7 +5,7 @@ import './MapPage.css';
 
 // Comprehensive Arabic/English mapping with floor and icons
 const DEPARTMENT_INFO = {
-  neurology: { ar: 'الأعصاب', en: 'Neurology', floor: 0, icon: '🧠' },
+  neurology: { ar: 'الأعصاب', en: 'Neurology', floor: 0, icon: '🧠', image: '/images/clinics/neurology.png' },
   breast: { ar: 'الثدي', en: 'Breast Surgery', floor: 0, icon: '🎗️' },
   head: { ar: 'الرأس', en: 'Head Surgery', floor: 0, icon: '🤕' },
   skinMasc1: { ar: 'الجلدية', en: 'Dermatology', floor: 0, icon: '🧴' },
@@ -21,7 +21,7 @@ const DEPARTMENT_INFO = {
   motawatna: { ar: 'المتوطنة', en: 'Endemic Diseases', floor: 0, icon: '🦠' },
   nasal: { ar: 'الأنف والأذن', en: 'ENT', floor: 1, icon: '👃' },
   eyes1: { ar: 'العيون 1', en: 'Ophthalmology 1', floor: 1, icon: '👁️' },
-  neural2: { ar: 'الأعصاب 2', en: 'Neurology 2', floor: 1, icon: '🧠' },
+  neural2: { ar: 'الأعصاب 2', en: 'Neurology 2', floor: 1, icon: '🧠', image: '/images/clinics/neurology.png' },
   eyes2: { ar: 'العيون 2', en: 'Ophthalmology 2', floor: 1, icon: '👁️' },
   pathology2: { ar: 'الباثولوجي 2', en: 'Pathology 2', floor: 1, icon: '🔬' },
   eyes3: { ar: 'العيون 3', en: 'Ophthalmology 3', floor: 1, icon: '👁️' },
@@ -32,9 +32,9 @@ const DEPARTMENT_INFO = {
   bone4: { ar: 'العظام 4', en: 'Orthopedics 4', floor: 1, icon: '🦴' },
   stomach2: { ar: 'المعدة 2', en: 'Gastro 2', floor: 1, icon: '🫄' },
   womenSurg: { ar: 'جراحة النساء', en: 'Women Surgery', floor: 1, icon: '⚕️' },
-  heartSurg: { ar: 'جراحة القلب', en: 'Heart Surgery', floor: 2, icon: '🫀' },
-  heart: { ar: 'القلب', en: 'Cardiology', floor: 2, icon: '❤️' },
-  brain: { ar: 'المخ', en: 'Brain Surgery', floor: 2, icon: '🧠' },
+  heartSurg: { ar: 'جراحة القلب', en: 'Heart Surgery', floor: 2, icon: '🫀', image: '/images/clinics/cardiology.png' },
+  heart: { ar: 'القلب', en: 'Cardiology', floor: 2, icon: '❤️', image: '/images/clinics/cardiology.png' },
+  brain: { ar: 'المخ', en: 'Brain Surgery', floor: 2, icon: '🧠', image: '/images/clinics/neurology.png' },
   genSurg2: { ar: 'جراحة عامة 2', en: 'General Surg 2', floor: 2, icon: '⚕️' },
   pathology3: { ar: 'الباثولوجي 3', en: 'Pathology 3', floor: 2, icon: '🔬' },
   genSurg3: { ar: 'جراحة عامة 3', en: 'General Surg 3', floor: 2, icon: '⚕️' },
@@ -48,11 +48,13 @@ const DEPARTMENT_INFO = {
 };
 
 const getDeptInfo = (deptId) => {
-  return DEPARTMENT_INFO[deptId] || {
-    ar: deptId,
-    en: deptId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-    floor: 0,
-    icon: '🏥'
+  const info = DEPARTMENT_INFO[deptId];
+  return {
+    ar: info?.ar || deptId,
+    en: info?.en || deptId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+    floor: info?.floor || 0,
+    icon: info?.icon || '🏥',
+    image: info?.image || '/images/clinics/default.png'
   };
 };
 
@@ -151,26 +153,33 @@ export default function MapPage() {
       {/* Floating Info Card */}
       {selectedInfo && (
         <div className="pro-info-card">
-          <div className="info-header">
-            <div className="dept-icon" style={{ fontSize: '2rem' }}>{selectedInfo.icon}</div>
-            <div className="info-badge">Selected</div>
+          <div 
+            className="info-image-header" 
+            style={{ backgroundImage: `url(${process.env.PUBLIC_URL}${selectedInfo.image})` }}
+          >
+            <div className="info-badge-overlay">Selected</div>
           </div>
-          <div className="info-title">
-            <h3>{selectedInfo.en}</h3>
-            <p>{selectedInfo.ar}</p>
-          </div>
-          <div className="info-details">
-            <div className="detail-row">
-              <span className="detail-label">Floor</span>
-              <span className="detail-value">Level {selectedInfo.floor}</span>
+          <div className="info-content-body">
+            <div className="info-header">
+              <div className="dept-icon" style={{ fontSize: '2rem' }}>{selectedInfo.icon}</div>
+              <div className="info-title">
+                <h3>{selectedInfo.en}</h3>
+                <p>{selectedInfo.ar}</p>
+              </div>
             </div>
-            <div className="detail-row">
-              <span className="detail-label">Est. Time</span>
-              <span className="detail-value">{Math.floor(Math.random() * 4) + 2} mins</span>
-            </div>
-            <div className="detail-row">
-              <span className="detail-label">Accessibility</span>
-              <span className="detail-value" style={{ color: '#38bdf8' }}>Wheelchair Friendly</span>
+            <div className="info-details">
+              <div className="detail-row">
+                <span className="detail-label">Floor</span>
+                <span className="detail-value">Level {selectedInfo.floor}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Est. Time</span>
+                <span className="detail-value">{Math.floor(Math.random() * 4) + 2} mins</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Accessibility</span>
+                <span className="detail-value" style={{ color: '#38bdf8' }}>Wheelchair Friendly</span>
+              </div>
             </div>
           </div>
         </div>
