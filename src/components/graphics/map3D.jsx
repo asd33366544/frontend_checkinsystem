@@ -186,11 +186,11 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
           child.userData.originalMaterial = child.material.clone();
         }
 
-        // Darker base material for cyberpunk feel
+        // Clean, professional architectural material
         child.material = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0x1a1a2e),
-          roughness: 0.8,
-          metalness: 0.2,
+          color: new THREE.Color(0x334155), // Slate grey
+          roughness: 0.9,
+          metalness: 0.1,
           side: THREE.DoubleSide,
           transparent: true,
           opacity: 1
@@ -217,58 +217,58 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
       if (child.isMesh) {
         const role = meshRoles.get(child) || { type: 'unknown', id: child.name };
 
-        let targetColor = new THREE.Color(0x151525);
+        let targetColor = new THREE.Color(0x334155);
         let targetEmissive = new THREE.Color(0x000000);
         let targetIntensity = 0;
-        let targetOpacity = 0.9;
+        let targetOpacity = 0.95;
         
         // Default depth behavior
         child.material.depthTest = true;
         child.renderOrder = 0;
 
         if (role.type === 'entrance') {
-          targetColor = new THREE.Color(0x222244);
-          targetEmissive = new THREE.Color(0x0044ff);
-          targetIntensity = 0.5;
+          targetColor = new THREE.Color(0x475569);
+          targetEmissive = new THREE.Color(0x38bdf8);
+          targetIntensity = 0.4;
           targetOpacity = 1;
         } else if (role.type === 'arrow') {
-          targetColor = new THREE.Color(0x00ffff);
-          targetEmissive = new THREE.Color(0x00ffff);
-          targetIntensity = 2.0;
+          targetColor = new THREE.Color(0x38bdf8);
+          targetEmissive = new THREE.Color(0x38bdf8);
+          targetIntensity = 1.0;
           targetOpacity = 1;
         } else if (role.type === 'path') {
           if (trimmedDept && pathNodeNames.includes(role.id)) {
-            targetColor = new THREE.Color(0x00ffff); // Cyberpunk Cyan
-            targetEmissive = new THREE.Color(0x00ffff);
-            targetIntensity = 3.5;
+            targetColor = new THREE.Color(0x38bdf8); // Professional Medical Blue
+            targetEmissive = new THREE.Color(0x0ea5e9);
+            targetIntensity = 1.8;
             targetOpacity = 1;
             child.material.depthTest = false; // Bypass obstructions
             child.renderOrder = 999;
           } else if (trimmedDept) {
-            targetColor = new THREE.Color(0x0a0a1a);
-            targetOpacity = 0.05;
+            targetColor = new THREE.Color(0x1e293b);
+            targetOpacity = 0.1;
             targetIntensity = 0;
           } else {
-            targetColor = new THREE.Color(0x1a1a2e);
-            targetOpacity = 0.4;
+            targetColor = new THREE.Color(0x475569);
+            targetOpacity = 0.5;
             targetIntensity = 0;
           }
         } else if (role.type === 'dept') {
           if (trimmedDept && role.id !== trimmedDept) {
-            targetColor = new THREE.Color(0x111122);
-            targetOpacity = 0.15;
+            targetColor = new THREE.Color(0x1e293b);
+            targetOpacity = 0.2;
           } else if (role.id === trimmedDept) {
-            targetColor = new THREE.Color(0xff00ff); // Cyberpunk Magenta
-            targetEmissive = new THREE.Color(0xff00ff);
-            targetIntensity = 2.5;
+            targetColor = new THREE.Color(0x0ea5e9); // Soft highlight
+            targetEmissive = new THREE.Color(0x0284c7);
+            targetIntensity = 0.8;
             targetOpacity = 1;
           } else {
-            targetColor = new THREE.Color(0x252535);
-            targetOpacity = 0.8;
+            targetColor = new THREE.Color(0x334155);
+            targetOpacity = 0.95;
           }
         } else {
-          targetColor = new THREE.Color(0x151525);
-          targetOpacity = 0.9;
+          targetColor = new THREE.Color(0x334155);
+          targetOpacity = 0.95;
         }
 
         child.material.color.copy(targetColor);
@@ -276,7 +276,6 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
         child.material.toneMapped = false;
         child.userData.targetEmissiveIntensity = targetIntensity;
         child.userData.targetOpacity = targetOpacity;
-        child.userData.baseEmissiveIntensity = targetIntensity; // For pulsing
       }
     });
 
@@ -311,23 +310,16 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
 
   // --- ANIMATION LOOP ---
   useFrame((state, delta) => {
-  // 1. Lerp bloom intensity and opacity with Cyberpunk Pulse
-  const time = state.clock.getElapsedTime();
-  const pulse = Math.sin(time * 4) * 0.5 + 0.5; // 0 to 1
+  // 1. Smooth, professional lerp for intensity and opacity
   const lerpFactor = Math.min(delta * 3.33, 1);
 
   if (scene) {
     scene.traverse((child) => {
       if (child.isMesh) {
-        if (child.userData.baseEmissiveIntensity !== undefined) {
-          let targetInt = child.userData.baseEmissiveIntensity;
-          // Add pulse effect to active paths (cyan)
-          if (targetInt >= 3.5 && child.material.emissive.getHex() === 0x00ffff) {
-            targetInt = 2.0 + pulse * 3.0; // pulse between 2.0 and 5.0
-          }
+        if (child.userData.targetEmissiveIntensity !== undefined) {
           child.material.emissiveIntensity = THREE.MathUtils.lerp(
             child.material.emissiveIntensity,
-            targetInt,
+            child.userData.targetEmissiveIntensity,
             lerpFactor
           );
         }
@@ -372,21 +364,20 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
 
   return (
     <>
-      {/* Cyberpunk Lighting & Atmosphere */}
-      <fog attach="fog" args={['#050510', 5, 30]} />
-      <ambientLight intensity={0.15} color="#404060" />
-      <directionalLight position={[10, 20, 10]} intensity={0.5} color="#00ffff" />
-      <pointLight position={[-10, 5, -10]} intensity={1.5} color="#ff00ff" />
-      <pointLight position={[10, 5, 10]} intensity={1.5} color="#00ffff" />
+      {/* Professional Architectural Lighting */}
+      <fog attach="fog" args={['#0f172a', 6, 25]} />
+      <ambientLight intensity={0.5} color="#f1f5f9" />
+      <directionalLight position={[10, 20, 10]} intensity={1.2} color="#ffffff" castShadow />
+      <directionalLight position={[-10, 10, -10]} intensity={0.4} color="#cbd5e1" />
 
       <primitive object={scene} />
 
       <EffectComposer disableNormalPass>
         <Bloom 
-          luminanceThreshold={0.4} 
+          luminanceThreshold={0.7} 
           mipmapBlur 
-          intensity={2.5} 
-          radius={0.8} 
+          intensity={1.0} 
+          radius={0.5} 
         />
       </EffectComposer>
 

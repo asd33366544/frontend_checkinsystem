@@ -76,9 +76,9 @@ export default function MapPage() {
     <div className="map-page-container">
       <div className="canvas-container">
         <Suspense fallback={
-          <div className="cyber-loading">
-            <div className="loading-spinner"></div>
-            <div>INITIALIZING MAP...</div>
+          <div className="pro-loading">
+            <div className="spinner"></div>
+            <div>Loading 3D Map...</div>
           </div>
         }>
           <Canvas camera={{ position: [0, 4, 8], fov: 50 }}>
@@ -90,11 +90,11 @@ export default function MapPage() {
         </Suspense>
       </div>
 
-      {/* Cyberpunk Sidebar */}
-      <div className="cyber-sidebar">
-        <div className="cyber-header">
-          <h2 className="cyber-title-en">Hospital Map</h2>
-          <h2 className="cyber-title-ar">خريطة المستشفى</h2>
+      {/* Professional Sidebar */}
+      <div className="pro-sidebar">
+        <div className="pro-header">
+          <h2 className="pro-title-en">Hospital Navigator</h2>
+          <h2 className="pro-title-ar">خريطة المستشفى</h2>
         </div>
 
         <div className="floor-selector">
@@ -114,7 +114,7 @@ export default function MapPage() {
 
         <div className="dept-list">
           {filteredDepartments.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center', color: '#888' }}>
+            <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
               Loading departments...
             </div>
           ) : (
@@ -138,22 +138,22 @@ export default function MapPage() {
         </div>
       </div>
 
-      {/* AI Navigation Assistant Widget */}
-      <div className="ai-assistant">
-        <div className="ai-avatar">🤖</div>
-        <div className="ai-msg">
+      {/* Elegant Guide Widget */}
+      <div className="pro-guide">
+        <div className="guide-dot"></div>
+        <div className="guide-msg">
           {selectedDepartment
-            ? `Navigating to ${selectedInfo?.en}...`
-            : 'Select a department to navigate'}
+            ? `Routing to ${selectedInfo?.en}...`
+            : 'Select a department to view its location'}
         </div>
       </div>
 
       {/* Floating Info Card */}
       {selectedInfo && (
-        <div className="floating-info-card">
+        <div className="pro-info-card">
           <div className="info-header">
             <div className="dept-icon" style={{ fontSize: '2rem' }}>{selectedInfo.icon}</div>
-            <div className="info-status">Target Acquired</div>
+            <div className="info-badge">Selected</div>
           </div>
           <div className="info-title">
             <h3>{selectedInfo.en}</h3>
@@ -161,16 +161,16 @@ export default function MapPage() {
           </div>
           <div className="info-details">
             <div className="detail-row">
-              <span className="detail-label">Floor Level</span>
+              <span className="detail-label">Floor</span>
               <span className="detail-value">Level {selectedInfo.floor}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">Est. Walking Time</span>
+              <span className="detail-label">Est. Time</span>
               <span className="detail-value">{Math.floor(Math.random() * 4) + 2} mins</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">Path Status</span>
-              <span className="detail-value" style={{ color: '#00ff00' }}>Clear</span>
+              <span className="detail-label">Accessibility</span>
+              <span className="detail-value" style={{ color: '#38bdf8' }}>Wheelchair Friendly</span>
             </div>
           </div>
         </div>
