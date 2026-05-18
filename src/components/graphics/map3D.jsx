@@ -186,10 +186,11 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
           child.userData.originalMaterial = child.material.clone();
         }
 
-        // Initialize mutable material once
+        // Darker base material for cyberpunk feel
         child.material = new THREE.MeshStandardMaterial({
-          color: child.userData.originalMaterial.color,
-          roughness: 0.7,
+          color: new THREE.Color(0x1a1a2e),
+          roughness: 0.8,
+          metalness: 0.2,
           side: THREE.DoubleSide,
           transparent: true,
           opacity: 1
@@ -216,58 +217,58 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
       if (child.isMesh) {
         const role = meshRoles.get(child) || { type: 'unknown', id: child.name };
 
-        let targetColor = new THREE.Color(0x555566);
+        let targetColor = new THREE.Color(0x151525);
         let targetEmissive = new THREE.Color(0x000000);
         let targetIntensity = 0;
-        let targetOpacity = 1;
+        let targetOpacity = 0.9;
         
         // Default depth behavior
         child.material.depthTest = true;
         child.renderOrder = 0;
 
         if (role.type === 'entrance') {
-          targetColor = child.userData.originalMaterial.color;
-          targetEmissive = new THREE.Color(0x000000);
-          targetIntensity = 0;
+          targetColor = new THREE.Color(0x222244);
+          targetEmissive = new THREE.Color(0x0044ff);
+          targetIntensity = 0.5;
           targetOpacity = 1;
         } else if (role.type === 'arrow') {
-          targetColor = child.userData.originalMaterial.color;
-          targetEmissive = new THREE.Color(0xffffaa);
-          targetIntensity = 1.3;
+          targetColor = new THREE.Color(0x00ffff);
+          targetEmissive = new THREE.Color(0x00ffff);
+          targetIntensity = 2.0;
           targetOpacity = 1;
         } else if (role.type === 'path') {
           if (trimmedDept && pathNodeNames.includes(role.id)) {
-            targetColor = new THREE.Color(0x00ccff);
-            targetEmissive = new THREE.Color(0x00ccff);
-            targetIntensity = 2.5;
+            targetColor = new THREE.Color(0x00ffff); // Cyberpunk Cyan
+            targetEmissive = new THREE.Color(0x00ffff);
+            targetIntensity = 3.5;
             targetOpacity = 1;
             child.material.depthTest = false; // Bypass obstructions
             child.renderOrder = 999;
           } else if (trimmedDept) {
-            targetColor = new THREE.Color(0x111122);
+            targetColor = new THREE.Color(0x0a0a1a);
             targetOpacity = 0.05;
             targetIntensity = 0;
           } else {
-            targetColor = new THREE.Color(0x333355);
+            targetColor = new THREE.Color(0x1a1a2e);
             targetOpacity = 0.4;
             targetIntensity = 0;
           }
         } else if (role.type === 'dept') {
           if (trimmedDept && role.id !== trimmedDept) {
-            targetColor = new THREE.Color(0x333344);
-            targetOpacity = 0.2;
+            targetColor = new THREE.Color(0x111122);
+            targetOpacity = 0.15;
           } else if (role.id === trimmedDept) {
-            targetColor = child.userData.originalMaterial.color;
-            targetEmissive = new THREE.Color(0x00ff44);
-            targetIntensity = 1.0; // Decreased bloom effect
+            targetColor = new THREE.Color(0xff00ff); // Cyberpunk Magenta
+            targetEmissive = new THREE.Color(0xff00ff);
+            targetIntensity = 2.5;
             targetOpacity = 1;
           } else {
-            targetColor = new THREE.Color(0x555566);
-            targetOpacity = 1;
+            targetColor = new THREE.Color(0x252535);
+            targetOpacity = 0.8;
           }
         } else {
-          targetColor = new THREE.Color(0x555566);
-          targetOpacity = 1;
+          targetColor = new THREE.Color(0x151525);
+          targetOpacity = 0.9;
         }
 
         child.material.color.copy(targetColor);
@@ -275,6 +276,7 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
         child.material.toneMapped = false;
         child.userData.targetEmissiveIntensity = targetIntensity;
         child.userData.targetOpacity = targetOpacity;
+        child.userData.baseEmissiveIntensity = targetIntensity; // For pulsing
       }
     });
 
@@ -309,18 +311,26 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
 
   // --- ANIMATION LOOP ---
   useFrame((state, delta) => {
-    // 1. Lerp bloom intensity and opacity
-    const lerpFactor = Math.min(delta * 3.33, 1);
-    if (scene) {
-      scene.traverse((child) => {
-        if (child.isMesh) {
-          if (child.userData.targetEmissiveIntensity !== undefined) {
-            child.material.emissiveIntensity = THREE.MathUtils.lerp(
-              child.material.emissiveIntensity,
-              child.userData.targetEmissiveIntensity,
-              lerpFactor
-            );
+  // 1. Lerp bloom intensity and opacity with Cyberpunk Pulse
+  const time = state.clock.getElapsedTime();
+  const pulse = Math.sin(time * 4) * 0.5 + 0.5; // 0 to 1
+  const lerpFactor = Math.min(delta * 3.33, 1);
+
+  if (scene) {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        if (child.userData.baseEmissiveIntensity !== undefined) {
+          let targetInt = child.userData.baseEmissiveIntensity;
+          // Add pulse effect to active paths (cyan)
+          if (targetInt >= 3.5 && child.material.emissive.getHex() === 0x00ffff) {
+            targetInt = 2.0 + pulse * 3.0; // pulse between 2.0 and 5.0
           }
+          child.material.emissiveIntensity = THREE.MathUtils.lerp(
+            child.material.emissiveIntensity,
+            targetInt,
+            lerpFactor
+          );
+        }
           if (child.userData.targetOpacity !== undefined) {
             child.material.opacity = THREE.MathUtils.lerp(
               child.material.opacity,
@@ -362,19 +372,31 @@ export default function Map3D({ selectedDepartment, onNodesLoaded }) {
 
   return (
     <>
-      <ambientLight intensity={0.8} />
-      <directionalLight position={[10, 20, 10]} intensity={2} color="#ffffff" />
+      {/* Cyberpunk Lighting & Atmosphere */}
+      <fog attach="fog" args={['#050510', 5, 30]} />
+      <ambientLight intensity={0.15} color="#404060" />
+      <directionalLight position={[10, 20, 10]} intensity={0.5} color="#00ffff" />
+      <pointLight position={[-10, 5, -10]} intensity={1.5} color="#ff00ff" />
+      <pointLight position={[10, 5, 10]} intensity={1.5} color="#00ffff" />
 
       <primitive object={scene} />
 
       <EffectComposer disableNormalPass>
-        <Bloom luminanceThreshold={1.2} mipmapBlur intensity={1.0} />
+        <Bloom 
+          luminanceThreshold={0.4} 
+          mipmapBlur 
+          intensity={2.5} 
+          radius={0.8} 
+        />
       </EffectComposer>
 
       <OrbitControls
         ref={controlsRef}
         makeDefault
         onStart={handleControlsStart}
+        maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going under floor
+        minDistance={2}
+        maxDistance={20}
       />
     </>
   );
